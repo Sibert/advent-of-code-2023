@@ -20,9 +20,8 @@ fn main() -> std::io::Result<()> {
 
         let mut matches: BTreeMap<usize, usize> = Default::default();
 
-        for i in 1..10 {
-            //let m = line.find(str_digit[i]);
-            let digit_str_matches: Vec<_> = line.match_indices(str_digit[i]).collect();
+        for (i, &digit_str) in str_digit.iter().enumerate().skip(1) {
+            let digit_str_matches: Vec<_> = line.match_indices(digit_str).collect();
 
             for (index, _m) in digit_str_matches {
                 matches.insert(index, i);
@@ -58,9 +57,11 @@ fn main() -> std::io::Result<()> {
             }
         }
 
-        let val = (first_digit.unwrap() * 10) + last_digit.unwrap();
-        println!("Digits: {:?} & {:?} (= {val}) for line '{replaced_line}' (was '{line}')", first_digit, last_digit);
-        sum_of_cal += val;
+        if let(Some(first), Some(last)) = (first_digit, last_digit) {
+            let val = (first * 10) + last;
+            println!("Digits: {:?} & {:?} (= {val}) for line '{replaced_line}' (was '{line}')", first_digit, last_digit);
+            sum_of_cal += val;
+        }
     }
     println!("Calibration value: {sum_of_cal}");
     Ok(())
