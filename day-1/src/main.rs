@@ -1,20 +1,17 @@
 use std::fs::File;
-use std::io::Read;
+use std::io::{BufRead, BufReader, Read};
 use std::collections::BTreeMap;
 
 fn main() -> std::io::Result<()> {
-    let mut file = File::open("input.txt")?;
-    let mut input = String::new();
+    let file = File::open("input.txt")?;
+    let reader = BufReader::new(file);
 
     let str_digit = vec!["zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"];
 
-    file.read_to_string(&mut input)?;
-
-    let lines = input.split('\n');
-
     let mut sum_of_cal = 0;
 
-    for line in lines {
+    for line in reader.lines() {
+        let line = &line?;
         if line.is_empty() {
             continue;
         }
